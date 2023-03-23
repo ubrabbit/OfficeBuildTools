@@ -444,17 +444,18 @@ def git_update(repo, is_no_errors=False, is_current_dir=False):
   #rename by ubrabbit custom repo
   if repo == "DocumentServer":
     repo = "OfficeDocumentServer"
-  elif repo == "server"
+  elif repo == "server":
     repo = "OfficeServer"
 
   print("[git] update: " + repo)
-  url = "https://github.com/ubrabbit/" + repo + ".git"
-  if config.option("git-protocol") == "ssh":
-    url = "git@github.com:ubrabbit/" + repo + ".git"
-  #print("[git] update: " + repo)
-  #url = "https://github.com/ONLYOFFICE/" + repo + ".git"
-  #if config.option("git-protocol") == "ssh":
-  #  url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+  if repo in ("OfficeDocumentServer", "OfficeServer"):
+    url = "https://github.com/ubrabbit/" + repo + ".git"
+    if config.option("git-protocol") == "ssh":
+      url = "git@github.com:ubrabbit/" + repo + ".git"
+  else:
+    url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+    if config.option("git-protocol") == "ssh":
+      url = "git@github.com:ONLYOFFICE/" + repo + ".git"
 
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
@@ -527,17 +528,18 @@ def create_pull_request(branches_to, repo, is_no_errors=False, is_current_dir=Fa
   #rename by ubrabbit custom repo
   if repo == "DocumentServer":
     repo = "OfficeDocumentServer"
-  elif repo == "server"
+  elif repo == "server":
     repo = "OfficeServer"
 
   print("[git] create pull request: " + repo)
-  url = "https://github.com/ubrabbit/" + repo + ".git"
-  if config.option("git-protocol") == "ssh":
-    url = "git@github.com:ubrabbit/" + repo + ".git"
-  #print("[git] create pull request: " + repo)
-  #url = "https://github.com/ONLYOFFICE/" + repo + ".git"
-  #if config.option("git-protocol") == "ssh":
-  #  url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+  if repo in ("OfficeDocumentServer", "OfficeServer"):
+    url = "https://github.com/ubrabbit/" + repo + ".git"
+    if config.option("git-protocol") == "ssh":
+      url = "git@github.com:ubrabbit/" + repo + ".git"
+  else:
+    url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+    if config.option("git-protocol") == "ssh":
+      url = "git@github.com:ONLYOFFICE/" + repo + ".git"
 
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
