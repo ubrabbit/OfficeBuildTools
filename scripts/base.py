@@ -66,7 +66,7 @@ def check_build_version(dir):
       version_number = version_number.replace("\n", "")
       set_env("PRODUCT_VERSION", version_number)
   if ("" == get_env("BUILD_NUMBER")):
-    set_env("BUILD_NUMBER", "0")      
+    set_env("BUILD_NUMBER", "0")
   return
 
 def print_info(info=""):
@@ -187,7 +187,7 @@ def copy_dir(src, dst):
   if is_dir(dst):
     delete_dir(dst)
   try:
-    shutil.copytree(get_path(src), get_path(dst))    
+    shutil.copytree(get_path(src), get_path(dst))
   except OSError as e:
     print('Directory not copied. Error: %s' % e)
   return
@@ -219,9 +219,9 @@ def copy_lib(src, dst, name):
         create_dir(dst + "/simulator")
         copy_dir(src + "/simulator/" + name + ".framework", dst + "/simulator/" + name + ".framework")
 
-        cmd("xcodebuild", ["-create-xcframework", 
-            "-framework", dst + "/" + name + ".framework", 
-            "-framework", dst + "/simulator/" + name + ".framework", 
+        cmd("xcodebuild", ["-create-xcframework",
+            "-framework", dst + "/" + name + ".framework",
+            "-framework", dst + "/simulator/" + name + ".framework",
             "-output", dst + "/" + name + ".xcframework"])
 
         delete_dir(dst + "/" + name + ".framework")
@@ -302,7 +302,7 @@ def writeFile(path, data):
   return
 
 # system cmd methods ------------------------------------
-def cmd(prog, args=[], is_no_errors=False):  
+def cmd(prog, args=[], is_no_errors=False):
   ret = 0
   if ("windows" == host_platform()):
     sub_args = args[:]
@@ -317,7 +317,7 @@ def cmd(prog, args=[], is_no_errors=False):
     sys.exit("Error (" + prog + "): " + str(ret))
   return ret
 
-def cmd2(prog, args=[], is_no_errors=False):  
+def cmd2(prog, args=[], is_no_errors=False):
   ret = 0
   command = prog if ("windows" != host_platform()) else get_path(prog)
   for arg in args:
@@ -379,7 +379,7 @@ def run_command(sCommand):
   finally:
     popen.stdout.close()
     popen.stderr.close()
-  
+
   return result
 
 def run_command_in_dir(directory, sCommand):
@@ -394,7 +394,7 @@ def run_command_in_dir(directory, sCommand):
   if (host == 'windows'):
     os.chdir(cur_dir)
   return ret
-  
+
 def exec_command_in_dir(directory, sCommand):
   host = host_platform()
   if (host == 'windows'):
@@ -441,10 +441,21 @@ def set_cwd(dir):
 
 # git ---------------------------------------------------
 def git_update(repo, is_no_errors=False, is_current_dir=False):
+  #rename by ubrabbit custom repo
+  if repo == "DocumentServer":
+    repo = "OfficeDocumentServer"
+  elif repo == "server"
+    repo = "OfficeServer"
+
   print("[git] update: " + repo)
-  url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+  url = "https://github.com/ubrabbit/" + repo + ".git"
   if config.option("git-protocol") == "ssh":
-    url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+    url = "git@github.com:ubrabbit/" + repo + ".git"
+  #print("[git] update: " + repo)
+  #url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+  #if config.option("git-protocol") == "ssh":
+  #  url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
     folder = repo
@@ -493,7 +504,7 @@ def get_repositories():
     result.update(get_server_addons())
     result["document-server-integration"] = [False, False]
     result["document-templates"] = [False, False]
-    
+
   if (config.check_option("module", "server") or config.check_option("platform", "ios")):
     result["core-fonts"] = [False, False]
 
@@ -513,10 +524,21 @@ def get_branding_repositories(checker):
   return
 
 def create_pull_request(branches_to, repo, is_no_errors=False, is_current_dir=False):
+  #rename by ubrabbit custom repo
+  if repo == "DocumentServer":
+    repo = "OfficeDocumentServer"
+  elif repo == "server"
+    repo = "OfficeServer"
+
   print("[git] create pull request: " + repo)
-  url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+  url = "https://github.com/ubrabbit/" + repo + ".git"
   if config.option("git-protocol") == "ssh":
-    url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+    url = "git@github.com:ubrabbit/" + repo + ".git"
+  #print("[git] create pull request: " + repo)
+  #url = "https://github.com/ONLYOFFICE/" + repo + ".git"
+  #if config.option("git-protocol") == "ssh":
+  #  url = "git@github.com:ONLYOFFICE/" + repo + ".git"
+
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
     folder = repo
@@ -541,7 +563,7 @@ def create_pull_request(branches_to, repo, is_no_errors=False, is_current_dir=Fa
         cmd("git", ["merge", "--abort"], is_no_errors)
       else:
         cmd("git", ["push"], is_no_errors)
-      
+
   os.chdir(old_cur)
   return
 
@@ -609,7 +631,7 @@ def qt_setup(platform):
       set_env("ARM64_TOOLCHAIN_BIN", cross_compiler_arm64)
       set_env("ARM64_TOOLCHAIN_BIN_PREFIX", get_prefix_cross_compiler_arm64())
 
-  return qt_dir  
+  return qt_dir
 
 def qt_version():
   qt_dir = get_env("QT_DEPLOY")
@@ -695,7 +717,7 @@ def qt_copy_plugin(name, out):
   src = get_env("QT_DEPLOY") + "/../plugins/" + name
   if not is_dir(src):
     return
-    
+
   copy_dir(src, out + "/" + name)
 
   if ("windows" == host_platform()):
@@ -707,7 +729,7 @@ def qt_copy_plugin(name, out):
         else:
           delete_file(fileCheck)
     for file in glob.glob(out + "/" + name + "/*.pdb"):
-      delete_file(file)      
+      delete_file(file)
   return
 
 def qt_dst_postfix():
@@ -776,7 +798,7 @@ def generate_plist_framework_folder(file):
   bundle_creator = "Ascensio System SIA"
   if ("" != get_env("PUBLISHER_NAME")):
     bundle_creator = get_env("PUBLISHER_NAME")
-  
+
   bundle_version_natural = readFile(get_script_dir() + "/../../core/Common/version.txt").split(".")
   bundle_version = []
   for n in bundle_version_natural:
@@ -1026,7 +1048,7 @@ def get_file_last_modified_url(url):
     key = key.upper()
     if key == "LAST-MODIFIED":
       retvalue = value
-  
+
   return retvalue
 
 def mac_correct_rpath_binary(path, libs):
@@ -1074,7 +1096,7 @@ def mac_correct_rpath_docbuilder(dir):
   os.chdir(dir)
   cmd("chmod", ["-v", "+x", "./docbuilder"])
   cmd("install_name_tool", ["-add_rpath", "@executable_path", "./docbuilder"], True)
-  mac_correct_rpath_binary("./docbuilder", ["icudata.58", "icuuc.58", "UnicodeConverter", "kernel", "kernel_network", "graphics", "PdfFile", "HtmlRenderer", "XpsFile", "DjVuFile", "HtmlFile2", "Fb2File", "EpubFile", "doctrenderer", "DocxRenderer"])  
+  mac_correct_rpath_binary("./docbuilder", ["icudata.58", "icuuc.58", "UnicodeConverter", "kernel", "kernel_network", "graphics", "PdfFile", "HtmlRenderer", "XpsFile", "DjVuFile", "HtmlFile2", "Fb2File", "EpubFile", "doctrenderer", "DocxRenderer"])
   os.chdir(cur_dir)
   return
 
@@ -1163,7 +1185,7 @@ def copy_sdkjs_plugins(dst_dir, is_name_as_guid=False, is_desktop_local=False):
     return
   plugins_list = plugins_list_config.rsplit(", ")
   for name in plugins_list:
-    copy_sdkjs_plugin(plugins_dir, dst_dir, name, is_name_as_guid, is_desktop_local)    
+    copy_sdkjs_plugin(plugins_dir, dst_dir, name, is_name_as_guid, is_desktop_local)
   return
 
 def copy_sdkjs_plugins_server(dst_dir, is_name_as_guid=False, is_desktop_local=False):
@@ -1173,7 +1195,7 @@ def copy_sdkjs_plugins_server(dst_dir, is_name_as_guid=False, is_desktop_local=F
     return
   plugins_list = plugins_list_config.rsplit(", ")
   for name in plugins_list:
-    copy_sdkjs_plugin(plugins_dir, dst_dir, name, is_name_as_guid, is_desktop_local)    
+    copy_sdkjs_plugin(plugins_dir, dst_dir, name, is_name_as_guid, is_desktop_local)
   return
 
 def support_old_versions_plugins(out_dir):
@@ -1187,11 +1209,11 @@ def support_old_versions_plugins(out_dir):
     content_plugin_base += file.read()
   content_plugin_base += "\n\n"
   with open(get_path(out_dir + "/plugins-ui.js"), "r") as file:
-    content_plugin_base += file.read()  
+    content_plugin_base += file.read()
   with open(get_path(out_dir + "/pluginBase.js"), "w") as file:
     file.write(content_plugin_base)
   delete_file(out_dir + "/plugins.js")
-  delete_file(out_dir + "/plugins-ui.js")  
+  delete_file(out_dir + "/plugins-ui.js")
   return
 
 def get_xcode_major_version():
@@ -1215,7 +1237,7 @@ def hack_xcode_ios():
   filedata += "\n"
   filedata += content_hack
   filedata += "\n\n"
-  
+
   delete_file(qmake_spec_file)
   with open(get_path(qmake_spec_file), "w") as file:
     file.write(filedata)
@@ -1298,7 +1320,7 @@ def copy_v8_files(core_dir, deploy_dir, platform, is_xp=False):
   directory_v8 = core_dir + "/Common/3dParty"
   if is_xp:
     directory_v8 += "/v8/v8_xp"
-  
+
   if (-1 != config.option("config").lower().find("v8_version_89")) and not is_xp:
     directory_v8 += "/v8_89/v8/out.gn/"
   else:
@@ -1371,20 +1393,20 @@ def generate_check_linux_system(build_tools_dir, out_dir):
 def convert_ios_framework_to_xcframework(folder, lib):
   cur_dir = os.getcwd()
   os.chdir(folder)
-  
+
   create_dir(lib + "_xc_tmp")
   create_dir(lib + "_xc_tmp/iphoneos")
   create_dir(lib + "_xc_tmp/iphonesimulator")
   copy_dir(lib + ".framework", lib + "_xc_tmp/iphoneos/" + lib + ".framework")
   copy_dir(lib + ".framework", lib + "_xc_tmp/iphonesimulator/" + lib + ".framework")
 
-  cmd("xcrun", ["lipo", "-remove", "x86_64", "./" + lib + "_xc_tmp/iphoneos/" + lib + ".framework/" + lib, 
+  cmd("xcrun", ["lipo", "-remove", "x86_64", "./" + lib + "_xc_tmp/iphoneos/" + lib + ".framework/" + lib,
     "-o", "./" + lib + "_xc_tmp/iphoneos/" + lib + ".framework/" + lib])
-  cmd("xcrun", ["lipo", "-remove", "arm64", "./" + lib + "_xc_tmp/iphonesimulator/" + lib + ".framework/" + lib, 
+  cmd("xcrun", ["lipo", "-remove", "arm64", "./" + lib + "_xc_tmp/iphonesimulator/" + lib + ".framework/" + lib,
     "-o", "./" + lib + "_xc_tmp/iphonesimulator/" + lib + ".framework/" + lib])
 
-  cmd("xcodebuild", ["-create-xcframework", 
-    "-framework", "./" + lib + "_xc_tmp/iphoneos/" + lib + ".framework/", 
+  cmd("xcodebuild", ["-create-xcframework",
+    "-framework", "./" + lib + "_xc_tmp/iphoneos/" + lib + ".framework/",
     "-framework", "./" + lib + "_xc_tmp/iphonesimulator/" + lib + ".framework/",
     "-output", lib + ".xcframework"])
 
