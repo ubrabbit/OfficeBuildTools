@@ -452,9 +452,9 @@ def git_update(repo, is_no_errors=False, is_current_dir=False):
     if config.option("git-protocol") == "ssh":
       url = "git@github.com:ubrabbit/" + real_repo + ".git"
   else:
-    url = "https://github.com/ONLYOFFICE/" + real_repo + ".git"
+    url = "https://github.com/ONLYOFFICE/" + repo + ".git"
     if config.option("git-protocol") == "ssh":
-      url = "git@github.com:ONLYOFFICE/" + real_repo + ".git"
+      url = "git@github.com:ONLYOFFICE/" + repo + ".git"
 
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
@@ -536,9 +536,9 @@ def create_pull_request(branches_to, repo, is_no_errors=False, is_current_dir=Fa
     if config.option("git-protocol") == "ssh":
       url = "git@github.com:ubrabbit/" + real_repo + ".git"
   else:
-    url = "https://github.com/ONLYOFFICE/" + real_repo + ".git"
+    url = "https://github.com/ONLYOFFICE/" + repo + ".git"
     if config.option("git-protocol") == "ssh":
-      url = "git@github.com:ONLYOFFICE/" + real_repo + ".git"
+      url = "git@github.com:ONLYOFFICE/" + repo + ".git"
 
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
